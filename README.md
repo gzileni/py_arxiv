@@ -59,6 +59,29 @@ axirv.set_path_download('/downloads/axirv')
 axirv.load()
 ```
 
+## Retriever Example
+
+Example usage with `ArxivRetriever` to process arXiv articles from S3 and download them locally:
+
+```python
+import os
+from py_arxiv_retriever import ArxivRetriever
+
+documents = []
+
+axirv = ArxivRetriever(
+    type_storage='s3',
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_REGION"),
+    bucket_name=os.getenv("AWS_BUCKET_NAME"),
+    prefix='arxiv',
+    path_download='arxiv_documents',
+)
+
+axirv.process()
+```
+
 ## License
 
 This project is distributed under the MIT license.

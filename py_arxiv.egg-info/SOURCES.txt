@@ -1,0 +1,10 @@
+LICENSE.md
+README.md
+pyproject.toml
+py_arxiv/__init__.py
+py_arxiv/axirv.py
+py_arxiv.egg-info/PKG-INFO
+py_arxiv.egg-info/SOURCES.txt
+py_arxiv.egg-info/dependency_links.txt
+py_arxiv.egg-info/requires.txt
+py_arxiv.egg-info/top_level.txt

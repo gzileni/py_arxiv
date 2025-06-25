@@ -2,3 +2,4 @@
 .vscode/
 merge.sh
 test*
+.arxiv_documents/

@@ -1,6 +1,5 @@
 import urllib.request as libreq
 import os
-from langchain_core.documents import Document
 import xml.etree.ElementTree as ET
 from typing import Literal
 from pyaws_s3 import S3Client
@@ -46,6 +45,13 @@ class ArxivLoader:
         if self.type_storage not in ['local', 's3']:
             raise ValueError("type_storage must be either 'local' or 's3'")
         
+        self.path_download = kwargs.get('path_download', self.path_download)
+        if not self.path_download:
+            raise ValueError("For local storage, path_download must be provided.")
+        
+        app_root = os.path.dirname(os.path.abspath(__file__))
+        self.path = os.path.join(app_root, self.path_download)
+        
         if self.type_storage == 's3':
             self.aws_access_key_id = kwargs.get("aws_access_key_id", os.getenv("AWS_ACCESS_KEY_ID"))
             self.aws_secret_access_key = kwargs.get("aws_secret_access_key", os.getenv("AWS_SECRET_ACCESS_KEY"))
@@ -61,13 +67,6 @@ class ArxivLoader:
                 aws_secret_access_key=self.aws_secret_access_key,
                 region_name=self.region_name
             )
-            
-        if self.type_storage == 'local':
-            self.path_download = kwargs.get('path_download', self.path_download)
-            if not self.path_download:
-                raise ValueError("For local storage, path_download must be provided.")
-            app_root = os.path.dirname(os.path.abspath(__file__))
-            self.path = os.path.join(app_root, self.path_download)
         
         query = "all" 
         if self.query:

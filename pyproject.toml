@@ -3,7 +3,7 @@ requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "py-arxiv-retriever"
+name = "arxiv-retriever"
 version = "1.0.2"
 description = "A Python package for interacting with the arXiv API, providing tools for searching, retrieving, and processing arXiv articles."
 authors = [
@@ -90,4 +90,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["py_arxiv"]  
+packages = ["py_arxiv_retriever"]  

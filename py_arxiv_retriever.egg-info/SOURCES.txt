@@ -1,0 +1,11 @@
+LICENSE.md
+README.md
+pyproject.toml
+py_arxiv_retriever/__init__.py
+py_arxiv_retriever/arxiv_retriever.py
+py_arxiv_retriever/axirv_loader.py
+py_arxiv_retriever.egg-info/PKG-INFO
+py_arxiv_retriever.egg-info/SOURCES.txt
+py_arxiv_retriever.egg-info/dependency_links.txt
+py_arxiv_retriever.egg-info/requires.txt
+py_arxiv_retriever.egg-info/top_level.txt

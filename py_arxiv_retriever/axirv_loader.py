@@ -43,14 +43,19 @@ class ArxivLoader:
         self.type_storage = kwargs.get('type_storage', self.type_storage)
         
         if self.type_storage not in ['local', 's3']:
+            print(f"Invalid type_storage: {self.type_storage}. Must be 'local' or 's3'.")
             raise ValueError("type_storage must be either 'local' or 's3'")
         
         self.path_download = kwargs.get('path_download', self.path_download)
         if not self.path_download:
+            print("No path_download provided. Defaulting to '.arxiv_documents'.")
             raise ValueError("For local storage, path_download must be provided.")
         
         app_root = os.path.dirname(os.path.abspath(__file__))
         self.path = os.path.join(app_root, self.path_download)
+        if not os.path.exists(self.path):
+            print(f"Creating directory {self.path} for document storage.")
+            os.makedirs(self.path)
         
         if self.type_storage == 's3':
             self.aws_access_key_id = kwargs.get("aws_access_key_id", os.getenv("AWS_ACCESS_KEY_ID"))
@@ -60,6 +65,7 @@ class ArxivLoader:
             self.prefix = kwargs.get("prefix", self.prefix)
             if not all([kwargs.get("aws_access_key_id"), kwargs.get("aws_secret_access_key"), 
                         kwargs.get("region_name"), kwargs.get("bucket_name")]):
+                print("Missing AWS credentials or bucket information for S3 access.")
                 raise ValueError("For S3 storage, aws_access_key_id, aws_secret_access_key, region_name, and bucket_name must be provided.")
             
             self.s3 = S3Client(

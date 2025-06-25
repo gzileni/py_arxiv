@@ -13,6 +13,7 @@ class ArxivRetriever(ArxivLoader):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.path_type = kwargs.get("path_type", self.path_type)
     
     def _get_documents_from_path(self) -> list[Document]:
         """
@@ -46,7 +47,7 @@ class ArxivRetriever(ArxivLoader):
         if not all([self.aws_access_key_id, self.aws_secret_access_key, self.bucket_name, self.region_name]):
             raise ValueError("Missing AWS credentials or bucket information for S3 access.")
             
-        prefix = kwargs.get("prefix", None)    
+        prefix = kwargs.get("prefix", self.prefix)    
             
         if prefix is None:
             raise ValueError("Prefix is not set. Please provide a valid prefix for S3 files.")
@@ -77,9 +78,9 @@ class ArxivRetriever(ArxivLoader):
                 raise ValueError("Local file path is not set. Please provide a valid local file path.")
             
             if not os.path.exists(local_file):
-                s3_client.download(file, local_path=self.path)
+                s3_client.download(file, local_path=local_file)
             
-            loader = PyPDFLoader(self.path)
+            loader = PyPDFLoader(local_file)
             documents.extend(loader.load())
             
         # process the downloaded files
@@ -99,8 +100,12 @@ class ArxivRetriever(ArxivLoader):
         if self.path is None:
             raise ValueError("Path is not set. Please provide a valid path.")
         
-        loader = PyPDFLoader(self.path)
-        documents : list[Document] = loader.load()
+        pdf_files = [f for f in os.listdir(self.path) if f.lower().endswith(".pdf")]
+        documents: list[Document] = []
+        for pdf_file in pdf_files:
+            file_path = os.path.join(self.path, pdf_file)
+            loader = PyPDFLoader(file_path)
+            documents.extend(loader.load())
         return documents
     
     def process(self, **kwargs: Any) -> list[Document]:    
